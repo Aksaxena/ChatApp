@@ -1,0 +1,110 @@
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+<script src="index.js"></script>
+<script>
+    var socket = io.connect('');
+    var data = {userId: "26"};
+    //var group = {groupId: "1"};
+
+    //socket.emit('connectGroup', group);
+
+    socket.emit('chkUser', data); // sending user name to the server
+	//socket.emit('readMessages', data); // get message between two users
+    socket.emit('readMessages',data)
+    // listener, whenever the server emits 'updatechat', this updates the chat body
+    socket.on('receivePrivateMsg', function (data) {
+        $('#conversation').append('<b>' + JSON.stringify(data) + '<br>');
+    });
+    socket.on('receiveReadMessages', function (data) {
+        console.log(data[0]);
+        $('#conversation').append('<b>' + JSON.stringify(data[0]) + '<br>');
+    });
+    
+    
+    //group
+    socket.on('loadOldMessages', function (data) {
+        $('#conversation_group').append('<b>' + JSON.stringify(data) + '<br>');
+    });
+    
+    socket.on('recivedGroupMsg', function (data) {
+        $('#conversation_group').append('<b>' + JSON.stringify(data) + '<br>');
+    });
+
+
+
+    // listener, whenever the server emits 'updaterooms', this updates the room the client is in
+//    socket.on('get msg', function (current_room) {
+//        console.log(current_room);
+//        $.each(current_room, function (key, value) {
+//            $('#rooms').append('<div>' + value + '</div>');
+//        });
+//    });
+
+    // on load of page
+    $(function () {
+        // when the client clicks SEND
+        $('#datasend').click(function () {
+            var message = $('#data').val();
+            var socketId = $('.socketId').val();
+            $('#data').val('');
+            var data_server = {
+                message: message,
+                from_id: '1',
+                to_id: '2'
+            };
+            socket.emit('sendPrivateMsg', data_server);
+        });
+
+        // when the client hits ENTER on their keyboard
+        $('#data').keypress(function (e) {
+            if (e.which == 13) {
+                $(this).blur();
+                $('#datasend').focus().click();
+            }
+        });
+        
+        
+        
+        //for group chat
+        
+        $('#datasend_group').click(function () {
+            var message = $('#data_group').val();
+            $('#data_group').val('');
+            var data_server = {
+                message: message,
+                from_id: '1',
+                group_id: '1'
+            };
+            socket.emit('sendGroupMsg', data_server);
+        });
+
+        // when the client hits ENTER on their keyboard
+        $('#data_group').keypress(function (e) {
+            if (e.which == 13) {
+                $(this).blur();
+                $('#datasend_group').focus().click();
+            }
+        });
+        
+    });
+
+</script>
+<div>
+    <div style="">
+    <label>One To One</label>
+        <div id="conversation"></div>
+        <input id="data" style="width:200px;" />
+        <input type="button" id="datasend" value="send" />
+    </div>
+    <br>
+    <br>
+    <br>
+    
+    <div style="">
+    <label>GROUP</label>
+        <div id="conversation_group"></div>
+        <input id="data_group" style="width:200px;" />
+        <input type="button" id="datasend_group" value="send" />
+    </div>
+    
+</div>
