@@ -51,7 +51,7 @@ server.listen(port);
 
 /***************************************************************************************************************************************************************/
 
-
+/*
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
     //res.send("Welcome to NSF Chat Server");
@@ -62,7 +62,7 @@ app.get('/docs', function (req, res) {
     app.use(express.static(__dirname + '/docs'));
     res.sendFile('./docs/index.html', {root: __dirname});
 });
-
+*/
 /************************************************************************ Start Soket Event ************************************************************************/
 
 io.sockets.on('connection', function (socket) {
