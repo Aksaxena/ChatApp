@@ -10,10 +10,12 @@ server.listen(3000);
 
 
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'vefinder_chatApp'
+    host: 'vefinder.puzzlecoder.com',
+    user: 'wil_user',
+    //password: 'notzft_$16@xyz',
+    password: 'x-8}OpOz6m1T',
+    //database: 'notsoforgetful_db'
+    database: 'vefinder'
 });
 
 connection.connect(function (err) {
